@@ -28,3 +28,4 @@ E:\Armen\TretjiLetnik\TPO\BetsiApp\obj\Debug\net8.0\refint\BetsiApp.dll
 E:\Armen\TretjiLetnik\TPO\BetsiApp\obj\Debug\net8.0\BetsiApp.pdb
 E:\Armen\TretjiLetnik\TPO\BetsiApp\obj\Debug\net8.0\BetsiApp.genruntimeconfig.cache
 E:\Armen\TretjiLetnik\TPO\BetsiApp\obj\Debug\net8.0\ref\BetsiApp.dll
+E:\Armen\TretjiLetnik\TPO\BetsiApp\obj\Debug\net8.0\BetsiApp.sourcelink.json

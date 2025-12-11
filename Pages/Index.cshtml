@@ -13,38 +13,52 @@
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
-                <th>Datum/Ura</th>
-                <th>Status</th>
+                <th>Tekmovanje</th> <th>Runda</th>       <th>Datum/Ura</th>
                 <th>Domača Ekipa</th>
                 <th>Gostujoča Ekipa</th>
                 <th>Rezultat</th>
-            </tr>
+                <th>Stadion</th>     </tr>
         </thead>
         <tbody>
             @foreach (var match in Model.Matches)
             {
                 <tr>
+                    <td>
+                        <strong>@match.Competition?.Name</strong>
+                    </td>
+                    <td>
+                        @if (match.Matchday.HasValue)
+                        {
+                            <span>Runda: @match.Matchday.Value</span>
+                        }
+                    </td>
                     <td>@match.UtcDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
                     <td>
-                        @match.Status 
+                        <strong>@match.HomeTeam?.Name</strong>
                     </td>
                     <td>
-                        <strong>@match.HomeTeam.Name</strong>
-                    </td>
-                    <td>
-                        <strong>@match.AwayTeam.Name</strong>
+                        <strong>@match.AwayTeam?.Name</strong>
                     </td>
                     <td>
                         @{
-                            // Preverimo, ali obstaja rezultat
-                            if (match.Score.FullTime.Home.HasValue && match.Score.FullTime.Away.HasValue)
+                            if (match.Score?.FullTime?.Home.HasValue ?? false)
                             {
                                 <span>@match.Score.FullTime.Home : @match.Score.FullTime.Away</span>
                             }
                             else
                             {
-                                <span>(Tekma še ni končana)</span>
+                                <span>-</span>
                             }
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(match.Venue))
+                        {
+                            <span>@match.Venue</span>
+                        }
+                        else
+                        {
+                            <span>N/A</span>
                         }
                     </td>
                 </tr>
@@ -55,6 +69,6 @@
 else
 {
     <div class="alert alert-warning">
-        Trenutno ni podatkov o tekmah. Preverite API ključ, kodo lige ("CL") in ali je API dosegljiv.
+        Trenutno ni podatkov o tekmah.
     </div>
 }

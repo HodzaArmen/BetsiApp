@@ -20,16 +20,27 @@ namespace BetsiApp.Models
         public DateTime UtcDate { get; set; }
 
         [JsonPropertyName("status")]
-        public string Status { get; set; }
+        public string? Status { get; set; } 
+
+        // NOVE LASTNOSTI:
+        [JsonPropertyName("matchday")]
+        public int? Matchday { get; set; } // Katera runda tekmovanja je
+
+        [JsonPropertyName("competition")]
+        public Competition? Competition { get; set; } // Informacije o ligi
+
+        [JsonPropertyName("venue")]
+        public string? Venue { get; set; } // Ime stadiona (Pri Football-Data.org je to včasih kar string)
+        // Konec NOVIH LASTNOSTI
 
         [JsonPropertyName("homeTeam")]
-        public Team HomeTeam { get; set; }
+        public Team? HomeTeam { get; set; }
 
         [JsonPropertyName("awayTeam")]
-        public Team AwayTeam { get; set; }
+        public Team? AwayTeam { get; set; }
 
         [JsonPropertyName("score")]
-        public Score Score { get; set; }
+        public Score? Score { get; set; }
     }
 
     // Podatki o ekipi
@@ -54,5 +65,20 @@ namespace BetsiApp.Models
         
         [JsonPropertyName("away")]
         public int? Away { get; set; } // Nullable int - če ni rezultata
+    }
+
+    public class Competition
+    {
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+        
+        [JsonPropertyName("code")]
+        public string? Code { get; set; }
+    }
+
+    public class Venue
+    {
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
     }
 }
