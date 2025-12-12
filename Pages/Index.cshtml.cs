@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BetsiApp.Models;
 using BetsiApp.Services;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace BetsiApp.Pages
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly FootballApiService _apiService;

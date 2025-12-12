@@ -1,0 +1,58 @@
+#-------------------------------------------------------------------
+# Visual Studio, Visual Studio Code in Rider (IDE)
+#-------------------------------------------------------------------
+## Ignoriranje map
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+*.bak
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+_ReSharper.*/
+.idea/
+.vs/
+/GeneratedFiles/
+.vscode/ # Dodano za VSC nastavitve (če jih ne želite deliti)
+
+#-------------------------------------------------------------------
+# .NET in C# binarni podatki
+#-------------------------------------------------------------------
+# DotNet build outputs
+*/[Bb]in/
+*/[Oo]bj/
+# Package files
+*.nupkg
+*.snk
+# Profiler
+*.vsp
+*.vsa
+*.vsl
+*.pdb
+
+#-------------------------------------------------------------------
+# Entity Framework Core Migracije in Baza
+#-------------------------------------------------------------------
+# Baza podatkov za SQLite (Vaša app.db)
+*.db
+*.sqlite
+
+# SQL Server Express LocalDB datoteke
+*.mdf
+*.ldf
+
+# Datoteke, ustvarjene s strani EF orodij
+efx.json
+
+#-------------------------------------------------------------------
+# ASP.NET Core
+#-------------------------------------------------------------------
+# Datoteke s ključi za avtentikacijo (ključne za Identity)
+**/.keys
+# Zasebne datoteke z nastavitvami (API ključi, Connection Strings)
+appsettings.Development.json
+# Privzeto ignorira vse datoteke appsettings, ki imajo environment suffix
+appsettings.*.json 
+UserSecretsId*.*
