@@ -47,14 +47,14 @@ namespace BetsiApp.Models
     public class Team
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
     }
 
     // Podatki o rezultatu
     public class Score
     {
         [JsonPropertyName("fullTime")]
-        public Goals FullTime { get; set; }
+        public required Goals FullTime { get; set; }
     }
 
     // Končni rezultat

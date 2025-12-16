@@ -15,10 +15,10 @@ namespace BetsiApp.Pages.Transactions
         private readonly ApplicationDbContext _context;
 
         [TempData]
-        public string StatusMessage { get; set; }
+        public string StatusMessage { get; set; } = string.Empty;
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new InputModel();
 
         public class InputModel
         {

@@ -1,6 +1,74 @@
 ﻿@page
 @model IndexModel
 @{
+    ViewData["Title"] = "Betsi - Športne Stave";
+}
+
+<div class="container mt-5">
+
+    <div class="text-center mb-5">
+        <h1 class="display-3 fw-bold">Dobrodošel v <span class="text-primary">Betsi</span></h1>
+        <p class="lead text-muted">
+            Vaša moderna platforma za spremljanje športnih tekem in pripravo stav.
+        </p>
+
+        <!-- Sem lahko dodaš svojo sliko -->
+        <div class="my-4">
+            <img src="/images/placeholder.jpg" class="img-fluid rounded shadow" style="max-width: 600px;" alt="Betsi promo slika">
+        </div>
+    </div>
+
+    <div class="row text-center">
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <h4 class="card-title">⚽ Nogomet</h4>
+                    <p class="text-muted">Oglejte si prihajajoče nogometne tekme in rezultate.</p>
+                    <a asp-page="/Football" class="btn btn-primary w-100">Poglej Nogomet</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <h4 class="card-title">🏀 Košarka</h4>
+                    <p class="text-muted">Pridobite pregled košarkaških tekem v naslednjih dneh.</p>
+                    <a asp-page="/Basketball" class="btn btn-warning w-100">Poglej Košarko</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <h4 class="card-title">💸 Stave</h4>
+                    <p class="text-muted">Upravljajte svoj profil, sredstva in zgodovino stav.</p>
+                    <a asp-page="/Transactions/Index" class="btn btn-success w-100">Pojdi na Stave</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="text-muted">
+            Izberi svoj šport in začni!
+        </p>
+    </div>
+
+</div>
+
+
+
+
+
+@*Sm zakomentiru prejšnjo verzijo če je komu bolj všeč da lahko samo popravi.
+Stran za nogomet se je preselila v Football.cshtml in .cs itd.*@
+@*@page
+@model IndexModel
+@{
     ViewData["Title"] = "Betsi - Tekme za Stave";
 }
 
@@ -71,4 +139,4 @@ else
     <div class="alert alert-warning">
         Trenutno ni podatkov o tekmah.
     </div>
-}
+}*@

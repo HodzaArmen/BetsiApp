@@ -16,12 +16,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // 3. Registracija Identity storitve - SPREMEMBA TUKAJ
 // Uporabljamo ApplicationUser namesto osnovnega IdentityUser
+// TLE JE PROBLEM ČE SE RABI APPUSER NAMESTO IDENTITYUSER, KR VERJETNO HOČEMO IDENTITY OHRANT,
+// AMPAK POLE JE APPLICATIONUSER BREZVEZE, SAMO NEVEM KKU TU DELA IN ZAKAJ K JST NISM - Miha
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+// Football in Basketball api
 builder.Services.AddHttpClient<FootballApiService>();
+builder.Services.AddHttpClient<BasketballApiService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

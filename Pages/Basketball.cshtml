@@ -1,0 +1,43 @@
+@page
+@model BetsiApp.Pages.BasketballModel
+
+<h1 class="text-center mt-3">Prihajajoče Košarkaške Tekme 🏀</h1>
+
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>Liga</th>
+            <th>Datum/Ura</th>
+            <th>Domača Ekipa</th>
+            <th>Gostujoča Ekipa</th>
+            <th>Rezultat</th>
+            <th>Dvorana</th>
+        </tr>
+    </thead>
+<tbody>
+@foreach (var g in Model.UpcomingGames)
+{
+    <tr>
+        <td><strong>@g.League?.Name</strong></td>
+
+        <td>@g.Date.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+
+        <td>@g.Teams?.Home?.Name</td>
+
+        <td>@g.Teams?.Away?.Name</td>
+
+        <td>
+            @(
+                g.Scores?.Home?.Total.HasValue == true 
+                && g.Scores?.Away?.Total.HasValue == true
+                ? $"{g.Scores.Home.Total} : {g.Scores.Away.Total}"
+                : "-"
+            )
+        </td>
+
+        <td>N/A</td> @* API-Sports basketball nima "venue" v free verziji *@
+    </tr>
+}
+</tbody>
+
+</table>
