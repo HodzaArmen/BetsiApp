@@ -3,6 +3,7 @@ using BetsiApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BetsiApp.SeedData;
+using BetsiApp.Models; // Ključno: Uvozite ApplicationUser
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +13,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // 2. Registracija DB Contexta
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString)); 
-    // Če uporabljate SQLite, bi tukaj uporabili options.UseSqlite(connectionString)
 
-// 3. Registracija Identity storitve
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+// 3. Registracija Identity storitve - SPREMEMBA TUKAJ
+// Uporabljamo ApplicationUser namesto osnovnega IdentityUser
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.

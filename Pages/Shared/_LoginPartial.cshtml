@@ -1,13 +1,24 @@
 @using Microsoft.AspNetCore.Identity
+@using BetsiApp.Models 
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager // Uporabimo ApplicationUser
+@inject UserManager<ApplicationUser> UserManager // Uporabimo ApplicationUser
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
-{
+{// Uvozimo naš ApplicationUser model v vrstici @using BetsiApp.Models
+    // 1. Pridobitev UserId in Uporabnika
+    var user = await UserManager.GetUserAsync(User);
+    var balance = user?.Balance ?? 0.00m; // Privzeto 0.00, če je uporabnik null
+
     <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+        <span class="nav-link text-dark">
+            Balance: @balance.ToString("F2") € 
+        </span>
+    </li>
+    
+    <li class="nav-item">
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(user?.UserName)!</a>
     </li>
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
@@ -17,6 +28,7 @@
 }
 else
 {
+    // ... (Koda za neprijavljenega uporabnika ostane enaka)
     <li class="nav-item">
         <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>

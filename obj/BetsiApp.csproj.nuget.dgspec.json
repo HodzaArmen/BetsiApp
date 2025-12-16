@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Armen\\TretjiLetnik\\TPO\\BetsiApp\\BetsiApp.csproj": {}
+    "C:\\jakob\\fakultet\\tpo\\BetsiApp\\BetsiApp.csproj": {}
   },
   "projects": {
-    "E:\\Armen\\TretjiLetnik\\TPO\\BetsiApp\\BetsiApp.csproj": {
+    "C:\\jakob\\fakultet\\tpo\\BetsiApp\\BetsiApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Armen\\TretjiLetnik\\TPO\\BetsiApp\\BetsiApp.csproj",
+        "projectUniqueName": "C:\\jakob\\fakultet\\tpo\\BetsiApp\\BetsiApp.csproj",
         "projectName": "BetsiApp",
-        "projectPath": "E:\\Armen\\TretjiLetnik\\TPO\\BetsiApp\\BetsiApp.csproj",
-        "packagesPath": "C:\\Users\\armen\\.nuget\\packages\\",
-        "outputPath": "E:\\Armen\\TretjiLetnik\\TPO\\BetsiApp\\obj\\",
+        "projectPath": "C:\\jakob\\fakultet\\tpo\\BetsiApp\\BetsiApp.csproj",
+        "packagesPath": "C:\\Users\\Ryzen\\.nuget\\packages\\",
+        "outputPath": "C:\\jakob\\fakultet\\tpo\\BetsiApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\armen\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Ryzen\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
