@@ -1,0 +1,31 @@
+@page
+@model BetsiApp.Pages.Transactions.WithdrawModel
+@{
+    ViewData["Title"] = "Izplačilo Sredstev";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h1>@ViewData["Title"]</h1>
+        <hr />
+        
+        @* Prikaz sporočila o uspehu/napaki *@
+        <partial name="_StatusMessage" model="Model.StatusMessage" />
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Amount" class="form-control" placeholder="10.00" />
+                <label asp-for="Input.Amount" class="form-label"></label>
+                <span asp-validation-for="Input.Amount" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="w-100 btn btn-lg btn-danger">Potrdi izplačilo</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

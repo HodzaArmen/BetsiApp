@@ -1,21 +1,30 @@
 @using Microsoft.AspNetCore.Identity
 @using BetsiApp.Models 
 
-@inject SignInManager<ApplicationUser> SignInManager // Uporabimo ApplicationUser
-@inject UserManager<ApplicationUser> UserManager // Uporabimo ApplicationUser
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
-{// Uvozimo naš ApplicationUser model v vrstici @using BetsiApp.Models
-    // 1. Pridobitev UserId in Uporabnika
+{
     var user = await UserManager.GetUserAsync(User);
-    var balance = user?.Balance ?? 0.00m; // Privzeto 0.00, če je uporabnik null
+    var balance = user?.Balance ?? 0.00m; 
 
-    <li class="nav-item">
-        <span class="nav-link text-dark">
-            Balance: @balance.ToString("F2") € 
-        </span>
+    // --- SPUSTNI MENI ZA STANJE (BALANCE DROPDOWN) ---
+    <li class="nav-item dropdown">
+        <a class="nav-link text-dark dropdown-toggle" href="#" id="balanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="fw-bold">Balance:</span> @balance.ToString("F2") €
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="balanceDropdown">
+            <li>
+                <a class="dropdown-item" asp-area="" asp-page="/Transactions/Deposit">Deposit</a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-area="" asp-page="/Transactions/Withdraw">Withdraw</a>
+            </li>
+        </ul>
     </li>
+    // ----------------------------------------------------
     
     <li class="nav-item">
         <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(user?.UserName)!</a>
