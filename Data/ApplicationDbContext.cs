@@ -19,5 +19,6 @@ namespace BetsiApp.Data
         public DbSet<Odd> Odds { get; set; }
         public DbSet<BetSlip> BetSlips { get; set; }
         public DbSet<BetItem> BetItems { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }
