@@ -22,6 +22,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient<FootballApiService>();
+
+builder.Services.AddScoped<BetSettlingService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

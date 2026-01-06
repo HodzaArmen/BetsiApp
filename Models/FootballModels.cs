@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace BetsiApp.Models
 {
+    
     // Glavni Response objekt, ki ga vrne API
     public class ApiRootResponse
     {
@@ -81,4 +82,5 @@ namespace BetsiApp.Models
         [JsonPropertyName("name")]
         public string? Name { get; set; }
     }
+    
 }

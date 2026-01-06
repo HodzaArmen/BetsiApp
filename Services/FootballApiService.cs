@@ -54,5 +54,28 @@ namespace BetsiApp.Services
                 return new List<Match>();
             }
         }
+        public async Task<List<Match>> GetMatchesByDateRangeAsync(DateTime from, DateTime to)
+        {
+            var dateFrom = from.ToString("yyyy-MM-dd");
+            var dateTo = to.ToString("yyyy-MM-dd");
+            string requestUri = $"matches?dateFrom={dateFrom}&dateTo={dateTo}";
+
+            try
+            {
+                var response = await _httpClient.GetAsync(requestUri);
+                response.EnsureSuccessStatusCode();
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var apiResponse = JsonSerializer.Deserialize<ApiRootResponse>(jsonString, options);
+                return apiResponse?.Matches ?? new List<Match>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Napaka pri pridobivanju rezultatov: {ex.Message}");
+                return new List<Match>();
+            }
+        }
     }
+    
+    
 }

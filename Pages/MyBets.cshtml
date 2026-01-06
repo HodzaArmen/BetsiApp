@@ -1,0 +1,59 @@
+@page
+@model BetsiApp.Pages.MyBetsModel
+@{
+    ViewData["Title"] = "My Bets";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">📋 My Bets</h1>
+
+    @if (!Model.BetSlips.Any())
+    {
+        <div class="alert alert-info">
+            Nimate še nobene oddane stave. <a asp-page="/Index">Oddaj svojo prvo stavo tukaj!</a>
+        </div>
+    }
+    else
+    {
+        @foreach (var slip in Model.BetSlips)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center @(slip.Status == "WON" ? "bg-success text-white" : slip.Status == "LOST" ? "bg-danger text-white" : "bg-light")">
+                    <span>
+                        <strong>ID Lističa: #@slip.Id</strong> | 
+                        📅 @slip.PlacementTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                    </span>
+                    <span class="badge @(slip.Status == "OPEN" ? "bg-warning text-dark" : "bg-white text-dark")">
+                        @slip.Status
+                    </span>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Tekma</th>
+                                <th>Izid</th>
+                                <th class="text-end">Kvota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in slip.BetItems)
+                            {
+                                <tr>
+                                    <td>@item.MatchDescription</td>
+                                    <td><span class="badge bg-info text-dark">Tip: @item.SelectedOutcome</span></td>
+                                    <td class="text-end">@item.PlacedOdd.ToString("F2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <span>Vložek: <strong>@slip.Stake.ToString("F2") €</strong></span>
+                    <span>Skupna kvota: <strong>@slip.TotalOdd.ToString("F2")</strong></span>
+                    <span>Možni dobitek: <strong class="text-primary">@((slip.Stake * slip.TotalOdd).ToString("F2")) €</strong></span>
+                </div>
+            </div>
+        }
+    }
+</div>
