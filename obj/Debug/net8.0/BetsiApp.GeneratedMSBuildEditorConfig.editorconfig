@@ -34,8 +34,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/jakob/fakultet/tpo/BetsiApp/Pages/Basketball.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmFza2V0YmFsbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/jakob/fakultet/tpo/BetsiApp/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/jakob/fakultet/tpo/BetsiApp/Pages/Football.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9vdGJhbGwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/jakob/fakultet/tpo/BetsiApp/Pages/Index.cshtml]
@@ -60,6 +68,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/jakob/fakultet/tpo/BetsiApp/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/jakob/fakultet/tpo/BetsiApp/Pages/Transactions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY3Rpb25zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/jakob/fakultet/tpo/BetsiApp/Pages/Transactions/Deposit.cshtml]
