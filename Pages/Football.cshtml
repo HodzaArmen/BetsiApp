@@ -1,0 +1,113 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Betsi - Tekme za Stave";
+}
+
+<div class="text-center">
+    <h1 class="display-4">⚽ Prihajajoče Tekme ⚽</h1>
+</div>
+
+@if (Model.Matches.Any())
+{
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Tekmovanje</th> <th>Runda</th>       <th>Datum/Ura</th>
+                <th>Domača Ekipa</th>
+                <th>Gostujoča Ekipa</th>
+                <th>Rezultat</th>
+                <th>Stadion</th>     </tr>
+        </thead>
+        <tbody>
+            @foreach (var match in Model.Matches)
+            {
+                <tr>
+                    <td>
+                        <strong>@match.Competition?.Name</strong>
+                    </td>
+                    <td>
+                        @if (match.Matchday.HasValue)
+                        {
+                            <span>Runda: @match.Matchday.Value</span>
+                        }
+                    </td>
+                    <td>@match.UtcDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        <strong>@match.HomeTeam?.Name</strong>
+                    </td>
+                    <td>
+                        <strong>@match.AwayTeam?.Name</strong>
+                    </td>
+                    <td>
+                        @{
+                            if (match.Score?.FullTime?.Home.HasValue ?? false)
+                            {
+                                <span>@match.Score.FullTime.Home : @match.Score.FullTime.Away</span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(match.Venue))
+                        {
+                            <span>@match.Venue</span>
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        Trenutno ni podatkov o tekmah.
+    </div>
+}
+
+@*@page
+@model BetsiApp.Pages.FootballModel
+
+<h1 class="text-center mt-3">Nogometne Tekme ⚽</h1>
+
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>Liga</th>
+            <th>Runda</th>
+            <th>Datum</th>
+            <th>Domača ekipa</th>
+            <th>Gostujoča ekipa</th>
+            <th>Rezultat</th>
+            <th>Stadion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.UpcomingMatches)
+        {
+            <tr>
+                <td><strong>@m.Competition?.Name</strong></td>
+                <td>@m.Matchday</td>
+                <td>@m.UtcDate.ToLocalTime()</td>
+                <td>@m.HomeTeam?.Name</td>
+                <td>@m.AwayTeam?.Name</td>
+                <td>
+                    @(
+                        m.Score?.FullTime?.Home.HasValue == true
+                        ? $"{m.Score.FullTime.Home} : {m.Score.FullTime.Away}"
+                        : "-"
+                    )
+                </td>
+                <td>@(m.Venue ?? "N/A")</td>
+            </tr>
+        }
+    </tbody>
+</table> *@
