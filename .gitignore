@@ -56,3 +56,8 @@ appsettings.Development.json
 # Privzeto ignorira vse datoteke appsettings, ki imajo environment suffix
 appsettings.*.json 
 UserSecretsId*.*
+[Bb]in/
+[Oo]bj/
+*.user
+.vs/
+app.db

@@ -72,62 +72,108 @@ Stran za nogomet se je preselila v Football.cshtml in .cs itd.*@
     ViewData["Title"] = "Betsi - Tekme za Stave";
 }
 
-<div class="text-center">
+<div class="text-center mb-4">
     <h1 class="display-4">⚽ Prihajajoče Tekme ⚽</h1>
 </div>
 
+@* Prikaz sporočil o uspehu ali napaki *@
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
 @if (Model.Matches.Any())
 {
-    <table class="table table-striped">
-        <thead class="thead-dark">
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
             <tr>
-                <th>Tekmovanje</th> <th>Runda</th>       <th>Datum/Ura</th>
-                <th>Domača Ekipa</th>
-                <th>Gostujoča Ekipa</th>
+                <th>Tekmovanje</th>
+                <th>Datum/Ura</th>
+                <th>Tekma</th>
                 <th>Rezultat</th>
-                <th>Stadion</th>     </tr>
+                <th style="width: 100px;">Znesek (€)</th>
+                <th class="text-center">1</th>
+                <th class="text-center">X</th>
+                <th class="text-center">2</th>
+            </tr>
         </thead>
         <tbody>
             @foreach (var match in Model.Matches)
             {
+                // "Avtomatske" kvote na podlagi ID-ja tekme (da so stabilne)
+                Random rnd = new Random(match.Id); 
+                decimal odd1 = (decimal)(rnd.NextDouble() * (3.0 - 1.2) + 1.2);
+                decimal oddX = (decimal)(rnd.NextDouble() * (4.5 - 2.8) + 2.8);
+                decimal odd2 = (decimal)(rnd.NextDouble() * (4.0 - 1.5) + 1.5);
+
                 <tr>
                     <td>
-                        <strong>@match.Competition?.Name</strong>
+                        <strong>@match.Competition?.Name</strong><br />
+                        <small class="text-muted">@(match.Matchday.HasValue ? $"Runda: {match.Matchday.Value}" : "")</small>
+                    </td>
+                    <td>@match.UtcDate.ToLocalTime().ToString("dd.MM. HH:mm")</td>
+                    <td>
+                        <strong>@match.HomeTeam?.Name</strong> vs <strong>@match.AwayTeam?.Name</strong><br />
+                        <small class="text-muted">@match.Venue</small>
                     </td>
                     <td>
-                        @if (match.Matchday.HasValue)
+                        @if (match.Score?.FullTime?.Home.HasValue ?? false)
                         {
-                            <span>Runda: @match.Matchday.Value</span>
-                        }
-                    </td>
-                    <td>@match.UtcDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>
-                        <strong>@match.HomeTeam?.Name</strong>
-                    </td>
-                    <td>
-                        <strong>@match.AwayTeam?.Name</strong>
-                    </td>
-                    <td>
-                        @{
-                            if (match.Score?.FullTime?.Home.HasValue ?? false)
-                            {
-                                <span>@match.Score.FullTime.Home : @match.Score.FullTime.Away</span>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        }
-                    </td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(match.Venue))
-                        {
-                            <span>@match.Venue</span>
+                            <span class="badge bg-secondary">@match.Score.FullTime.Home : @match.Score.FullTime.Away</span>
                         }
                         else
                         {
-                            <span>N/A</span>
+                            <span class="badge bg-light text-dark border">Priprava</span>
                         }
+                    </td>
+
+                    @* POLJE ZA VNOS ZNESKA - velja za vse tri gumbe desno *@
+                    <td>
+                        <input type="number" form="form-1-@match.Id" name="stake" class="form-control form-control-sm" value="10" min="1" />
+                        @* Skriti inputi, da se znesek prenese tudi če klikneš X ali 2 *@
+                        <script>
+                            document.addEventListener('change', function (e) {
+                                if (e.target.name === 'stake') {
+                                    document.querySelectorAll('.stake-input-@match.Id').forEach(i => i.value = e.target.value);
+                                }
+                            });
+                        </script>
+                    </td>
+
+                    @* GUMB ZA TIP 1 *@
+                    <td class="text-center">
+                        <form method="post" asp-page-handler="PlaceBet" id="form-1-@match.Id">
+                            <input type="hidden" name="matchId" value="@match.Id" />
+                            <input type="hidden" name="homeTeam" value="@match.HomeTeam?.Name" />
+                            <input type="hidden" name="awayTeam" value="@match.AwayTeam?.Name" />
+                            <input type="hidden" name="selectedOutcome" value="1" />
+                            <input type="hidden" name="oddValue" value="@odd1" />
+                            <input type="hidden" name="stake" class="stake-input-@match.Id" value="10" />
+                            <button type="submit" class="btn btn-sm btn-outline-primary w-100">@odd1.ToString("F2")</button>
+                        </form>
+                    </td>
+
+                    @* GUMB ZA TIP X *@
+                    <td class="text-center">
+                        <form method="post" asp-page-handler="PlaceBet">
+                            <input type="hidden" name="matchId" value="@match.Id" />
+                            <input type="hidden" name="homeTeam" value="@match.HomeTeam?.Name" />
+                            <input type="hidden" name="awayTeam" value="@match.AwayTeam?.Name" />
+                            <input type="hidden" name="selectedOutcome" value="X" />
+                            <input type="hidden" name="oddValue" value="@oddX" />
+                            <input type="hidden" name="stake" class="stake-input-@match.Id" value="10" />
+                            <button type="submit" class="btn btn-sm btn-outline-secondary w-100">@oddX.ToString("F2")</button>
+                        </form>
+                    </td>
+
+                    @* GUMB ZA TIP 2 *@
+                    <td class="text-center">
+                        <form method="post" asp-page-handler="PlaceBet">
+                            <input type="hidden" name="matchId" value="@match.Id" />
+                            <input type="hidden" name="homeTeam" value="@match.HomeTeam?.Name" />
+                            <input type="hidden" name="awayTeam" value="@match.AwayTeam?.Name" />
+                            <input type="hidden" name="selectedOutcome" value="2" />
+                            <input type="hidden" name="oddValue" value="@odd2" />
+                            <input type="hidden" name="stake" class="stake-input-@match.Id" value="10" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger w-100">@odd2.ToString("F2")</button>
+                        </form>
                     </td>
                 </tr>
             }
@@ -136,7 +182,7 @@ Stran za nogomet se je preselila v Football.cshtml in .cs itd.*@
 }
 else
 {
-    <div class="alert alert-warning">
-        Trenutno ni podatkov o tekmah.
+    <div class="alert alert-warning text-center">
+        Trenutno ni podatkov o tekmah. Poskusite kasneje.
     </div>
-}*@
+}
