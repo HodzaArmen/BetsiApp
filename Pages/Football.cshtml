@@ -1,14 +1,132 @@
 @page
-@model IndexModel
+@model BetsiApp.Pages.FootballModel
 @{
-    ViewData["Title"] = "Betsi - Tekme za Stave";
+    ViewData["Title"] = "Nogometne stave";
 }
 
 <div class="text-center">
     <h1 class="display-4">⚽ Prihajajoče Tekme ⚽</h1>
 </div>
 
-@if (Model.Matches.Any())
+@if (TempData["StatusMessage"] != null)
+{
+    <div class="alert alert-success text-center">
+        @TempData["StatusMessage"]
+    </div>
+}
+
+@*Miha v sredo 3. verzija*@
+@if (Model.UpcomingMatches.Any())
+{
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Tekmovanje</th>
+                <th>Runda</th>
+                <th>Datum/Ura</th>
+                <th>Tekma</th>
+                <th>Rezultat</th>
+                <th>Znesek (€)</th>
+                <th class="text-center">1</th>
+                <th class="text-center">X</th>
+                <th class="text-center">2</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var match in Model.UpcomingMatches)
+        {
+            Random rnd = new Random(match.Id);
+            decimal odd1 = (decimal)(rnd.NextDouble() * (3.0 - 1.2) + 1.2);
+            decimal oddX = (decimal)(rnd.NextDouble() * (4.5 - 2.8) + 2.8);
+            decimal odd2 = (decimal)(rnd.NextDouble() * (4.0 - 1.5) + 1.5);
+
+            <tr>
+                <td>@match.Competition?.Name</td>
+
+                <td>@match.Matchday</td>
+
+                <td>@match.UtcDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+
+                <td>
+                    <strong>@match.HomeTeam?.Name</strong> vs
+                    <strong>@match.AwayTeam?.Name</strong>
+                </td>
+
+                <td>
+                    @if (match.Score?.FullTime?.Home.HasValue ?? false)
+                    {
+                        <span>@match.Score.FullTime.Home : @match.Score.FullTime.Away</span>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+
+                <td colspan="4">
+                    <form method="post" asp-page-handler="PlaceBet" class="d-flex gap-1">
+
+                        <input type="hidden" name="matchId" value="@match.Id" />
+                        <input type="hidden" name="homeTeam" value="@match.HomeTeam?.Name" />
+                        <input type="hidden" name="awayTeam" value="@match.AwayTeam?.Name" />
+                        <input type="hidden" name="oddValue" id="odd-@match.Id" />
+                        <input type="hidden" name="selectedOutcome" id="outcome-@match.Id" />
+
+                        <input type="number"
+                            name="stake"
+                            class="form-control form-control-sm"
+                            value="10" min="1" style="width:80px;" />
+
+                        <button type="submit"
+                                class="btn btn-outline-primary"
+                                onclick="setBet('@match.Id','1','@odd1')">
+                            @odd1.ToString("F2")
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-outline-secondary"
+                                onclick="setBet('@match.Id','X','@oddX')">
+                            @oddX.ToString("F2")
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-outline-danger"
+                                onclick="setBet('@match.Id','2','@odd2')">
+                            @odd2.ToString("F2")
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        Trenutno ni podatkov o tekmah.
+    </div>
+}
+<script>
+    function setBet(matchId, outcome, odd) {
+        document.getElementById('outcome-' + matchId).value = outcome;
+        document.getElementById('odd-' + matchId).value = odd;
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+@* Druga verzija
+@if (Model.UpcomingMatches.Any())
 {
     <table class="table table-striped">
         <thead class="thead-dark">
@@ -20,7 +138,7 @@
                 <th>Stadion</th>     </tr>
         </thead>
         <tbody>
-            @foreach (var match in Model.Matches)
+            @foreach (var match in Model.UpcomingMatches)
             {
                 <tr>
                     <td>
@@ -72,7 +190,16 @@ else
         Trenutno ni podatkov o tekmah.
     </div>
 }
+*@
 
+
+
+
+
+
+
+
+@*Prva verzija*@
 @*@page
 @model BetsiApp.Pages.FootballModel
 

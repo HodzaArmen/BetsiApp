@@ -3,41 +3,95 @@
 
 <h1 class="text-center mt-3">Prihajajoče Košarkaške Tekme 🏀</h1>
 
-<table class="table table-striped mt-4">
-    <thead>
+@if (TempData["StatusMessage"] != null)
+{
+    <div class="alert alert-info text-center">
+        @TempData["StatusMessage"]
+    </div>
+}
+
+<table class="table table-striped mt-4 align-middle">
+    <thead class="table-dark">
         <tr>
             <th>Liga</th>
             <th>Datum/Ura</th>
-            <th>Domača Ekipa</th>
-            <th>Gostujoča Ekipa</th>
+            <th>Tekma</th>
             <th>Rezultat</th>
-            <th>Dvorana</th>
+            <th>Znesek (€)</th>
+            <th class="text-center">1</th>
+            <th class="text-center">2</th>
         </tr>
     </thead>
-<tbody>
-@foreach (var g in Model.UpcomingGames)
-{
-    <tr>
-        <td><strong>@g.League?.Name</strong></td>
 
-        <td>@g.Date.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+    <tbody>
+    @foreach (var g in Model.UpcomingGames)
+    {
+        // “fake” kvote – isto kot pri nogometu
+        Random rnd = new Random(g.Id);
+        decimal oddHome = (decimal)(rnd.NextDouble() * (2.5 - 1.2) + 1.2);
+        decimal oddAway = (decimal)(rnd.NextDouble() * (2.5 - 1.2) + 1.2);
 
-        <td>@g.Teams?.Home?.Name</td>
+        <tr>
+            <td><strong>@g.League.Name</strong></td>
 
-        <td>@g.Teams?.Away?.Name</td>
+            <td>@g.Date.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
 
-        <td>
-            @(
-                g.Scores?.Home?.Total.HasValue == true 
-                && g.Scores?.Away?.Total.HasValue == true
-                ? $"{g.Scores.Home.Total} : {g.Scores.Away.Total}"
-                : "-"
-            )
-        </td>
+            <td>
+                <strong>@g.Teams.Home.Name</strong> vs
+                <strong>@g.Teams.Away.Name</strong>
+            </td>
 
-        <td>N/A</td> @* API-Sports basketball nima "venue" v free verziji *@
-    </tr>
-}
-</tbody>
+            <td>
+                @(g.Scores.Home.Total.HasValue && g.Scores.Away.Total.HasValue
+                    ? $"{g.Scores.Home.Total} : {g.Scores.Away.Total}"
+                    : "-")
+            </td>
 
+            <!-- ZNESEK -->
+
+            <td>
+                <form method="post" asp-page-handler="PlaceBet" class="d-flex gap-1">
+
+                    <input type="hidden" name="matchId" value="@g.Id" />
+                    <input type="hidden" name="homeTeam" value="@g.Teams.Home.Name" />
+                    <input type="hidden" name="awayTeam" value="@g.Teams.Away.Name" />
+
+                    <input type="number"
+                        name="stake"
+                        class="form-control form-control-sm"
+                        value="10" min="1" style="width:70px;" />
+
+                    <!-- HOME -->
+                    <button type="submit"
+                            name="selectedOutcome"
+                            value="1"
+                            formaction="?handler=PlaceBet"
+                            class="btn btn-outline-primary">
+                        <input type="hidden" name="oddValue" value="@oddHome" />
+                        @oddHome.ToString("F2")
+                    </button>
+
+                    <!-- AWAY -->
+                    <button type="submit"
+                            name="selectedOutcome"
+                            value="2"
+                            formaction="?handler=PlaceBet"
+                            class="btn btn-outline-danger">
+                        <input type="hidden" name="oddValue" value="@oddAway" />
+                        @oddAway.ToString("F2")
+                    </button>
+                </form>
+            </td>
+
+
+        </tr>
+    }
+    </tbody>
 </table>
+
+<script>
+    function setBasketBet(matchId, outcome, odd) {
+        document.getElementById('outcome-' + matchId).value = outcome;
+        document.getElementById('odd-' + matchId).value = odd;
+    }
+</script>

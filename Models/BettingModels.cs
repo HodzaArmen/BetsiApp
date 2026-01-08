@@ -48,7 +48,9 @@ namespace BetsiApp.Models
         // Kvota, po kateri je bila stava sprejeta (ključen podatek!)
         [Column(TypeName = "decimal(5, 2)")]
         public decimal PlacedOdd { get; set; }
-        
+
+        public string Sport { get; set; } = "Football";
+
         // Povezava na Stavni listič
         public int BetSlipId { get; set; }
         public BetSlip? BetSlip { get; set; } // Navigacijska lastnost

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BetsiApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43796275fa162cc53e5806aa124fbb57dbee4f53")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3ddbf7c23826029b3afd1b6179b55ec5ee8ffdb4")]
 [assembly: System.Reflection.AssemblyProductAttribute("BetsiApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BetsiApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

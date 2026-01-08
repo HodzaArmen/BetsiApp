@@ -41,8 +41,12 @@
                             {
                                 <tr>
                                     <td>@item.MatchDescription</td>
-                                    <td><span class="badge bg-info text-dark">Tip: @item.SelectedOutcome</span></td>
+                                    <td><span class="badge bg-success text-dark">@item.SelectedOutcome</span></td>
                                     <td class="text-end">@item.PlacedOdd.ToString("F2")</td>
+                                    <span class="badge
+                                        @(item.Sport == "Football" ? "bg-success" : "bg-warning")">
+                                        @(item.Sport == "Football" ? "⚽ Nogomet" : "🏀 Košarka")
+                                    </span>
                                 </tr>
                             }
                         </tbody>
