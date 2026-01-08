@@ -90,6 +90,18 @@ namespace BetsiApp.Pages
                 outcomeText = selectedOutcome;
             }
 
+            // 🔹 Zabeleži stavo v zgodovino transakcij
+            var transaction = new Transaction
+            {
+                UserId = user.Id,
+                Amount = stake,
+                Date = DateTime.UtcNow,
+                Type = "Bet",
+                Description = $"Stava: {homeTeam} vs {awayTeam} – {outcomeText}"
+            };
+
+            _context.Transactions.Add(transaction);
+
 
             // 3️⃣ Postavka
             var betItem = new BetItem

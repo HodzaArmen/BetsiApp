@@ -30,11 +30,27 @@
         {
             if (item.Type == "Deposit")
             {
-                <li class="alert alert-primary">+ @item.Amount.ToString("F2") € (polog) @item.Date.ToString("dd.MM.yyyy HH:mm")</li>
+                <li class="alert alert-primary">
+                    + @item.Amount.ToString("F2") € (polog)
+                    <br />
+                    <small>@item.Date.ToString("dd.MM.yyyy HH:mm")</small>
+                </li>
             }
             else if (item.Type == "Withdraw")
             {
-                <li class="alert alert-warning">- @item.Amount.ToString("F2") € (dvig) @item.Date.ToString("dd.MM.yyyy HH:mm")</li>
+                <li class="alert alert-warning">
+                    - @item.Amount.ToString("F2") € (dvig)
+                    <br />
+                    <small>@item.Date.ToString("dd.MM.yyyy HH:mm")</small>
+                </li>
+            }
+            else if (item.Type == "Bet")
+            {
+                <li class="alert alert-secondary">
+                    🎲 @item.Description — @item.Amount.ToString("F2") €
+                    <br />
+                    <small>@item.Date.ToString("dd.MM.yyyy HH:mm")</small>
+                </li>
             }
         }
     </ul>

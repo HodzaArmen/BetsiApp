@@ -55,10 +55,11 @@ namespace BetsiApp.Pages
                 // shrani transakcijo v bazo
                 var transaction = new Transaction
                 {
+                    UserId = user.Id,
                     Amount = Amount,
-                    Date = System.DateTime.Now,
+                    Date = DateTime.UtcNow,
                     Type = "Deposit",
-                    UserId = user.Id
+                    Description = $"Polog {Amount:F2} €"
                 };
                 _db.Transactions.Add(transaction);
                 await _db.SaveChangesAsync();
@@ -87,10 +88,11 @@ namespace BetsiApp.Pages
                     // shrani transakcijo v bazo
                     var transaction = new Transaction
                     {
+                        UserId = user.Id,
                         Amount = Amount,
-                        Date = System.DateTime.Now,
+                        Date = DateTime.UtcNow,
                         Type = "Withdraw",
-                        UserId = user.Id
+                        Description = $"Dvig {Amount:F2} €"
                     };
                     _db.Transactions.Add(transaction);
                     await _db.SaveChangesAsync();

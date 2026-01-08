@@ -8,6 +8,7 @@ namespace BetsiApp.Models
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public string Type { get; set; }   // "Deposit" ali "Withdraw"
+        public string Description { get; set; }
 
         // povezava na uporabnika
         public string UserId { get; set; }
