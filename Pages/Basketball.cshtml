@@ -1,7 +1,21 @@
 @page
 @model BetsiApp.Pages.BasketballModel
 
-<h1 class="text-center mt-3">Prihajajoče Košarkaške Tekme 🏀</h1>
+<h1 class="text-center mt-6 fw-semibold mb-4">🏀 Košarkaške Tekme 🏀</h1>
+
+<form method="get" class="d-flex justify-content-center mb-3">
+    <div style="max-width: 360px;" class="w-100">
+        <select name="League" class="form-select" onchange="this.form.submit()">
+            <option value="">Vse lige</option>
+            @foreach (var l in Model.LeagueOptions)
+            {
+                <option value="@l" selected="@(Model.League == l)">
+                    @l
+                </option>
+            }
+        </select>
+    </div>
+</form>
 
 @if (TempData["StatusMessage"] != null)
 {
@@ -13,13 +27,13 @@
 <table class="table table-striped mt-4 align-middle">
     <thead class="table-dark">
         <tr>
-            <th>Liga</th>
-            <th>Datum/Ura</th>
-            <th>Tekma</th>
-            <th>Rezultat</th>
-            <th>Znesek (€)</th>
-            <th class="text-center">1</th>
-            <th class="text-center">2</th>
+            <th style="width:16%;">Liga</th>
+            <th style="width:16%;">Datum / Ura</th>
+            <th style="width:34%;">Tekma</th>
+            <th style="width:10%;" class="text-center">Rezultat</th>
+            <th style="width:10%;" class="text-center">Znesek (€)</th>
+            <th style="width:7%;" class="text-center">1</th>
+            <th style="width:7%;" class="text-center">2</th>
         </tr>
     </thead>
 
@@ -41,50 +55,47 @@
                 <strong>@g.Teams.Away.Name</strong>
             </td>
 
-            <td>
+            <td class="text-center">
                 @(g.Scores.Home.Total.HasValue && g.Scores.Away.Total.HasValue
                     ? $"{g.Scores.Home.Total} : {g.Scores.Away.Total}"
                     : "-")
             </td>
 
-            <!-- ZNESEK -->
+            @* ✅ one form per row, but now each column has its own <td> *@
+            <form method="post" asp-page-handler="PlaceBet">
+                <input type="hidden" name="matchId" value="@g.Id" />
+                <input type="hidden" name="homeTeam" value="@g.Teams.Home.Name" />
+                <input type="hidden" name="awayTeam" value="@g.Teams.Away.Name" />
 
-            <td>
-                <form method="post" asp-page-handler="PlaceBet" class="d-flex gap-1">
-
-                    <input type="hidden" name="matchId" value="@g.Id" />
-                    <input type="hidden" name="homeTeam" value="@g.Teams.Home.Name" />
-                    <input type="hidden" name="awayTeam" value="@g.Teams.Away.Name" />
-
+                <td class="text-center">
                     <input type="number"
                         name="stake"
-                        class="form-control form-control-sm"
-                        value="10" min="1" style="width:70px;" />
+                        class="form-control form-control-sm text-center"
+                        value="0" min="1" style="width:80px; margin:auto;" />
+                </td>
 
-                    <!-- HOME -->
+                <td class="text-center">
                     <button type="submit"
+                            class="btn btn-sm btn-outline-primary w-100"
                             name="selectedOutcome"
-                            value="1"
-                            formaction="?handler=PlaceBet"
-                            class="btn btn-outline-primary">
+                            value="1">
                         <input type="hidden" name="oddValue" value="@oddHome" />
                         @oddHome.ToString("F2")
                     </button>
+                </td>
 
-                    <!-- AWAY -->
+                <td class="text-center">
                     <button type="submit"
+                            class="btn btn-sm btn-outline-danger w-100"
                             name="selectedOutcome"
-                            value="2"
-                            formaction="?handler=PlaceBet"
-                            class="btn btn-outline-danger">
+                            value="2">
                         <input type="hidden" name="oddValue" value="@oddAway" />
                         @oddAway.ToString("F2")
                     </button>
-                </form>
-            </td>
-
-
+                </td>
+            </form>
         </tr>
+
     }
     </tbody>
 </table>

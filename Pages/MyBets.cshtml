@@ -4,36 +4,52 @@
     ViewData["Title"] = "My Bets";
 }
 
-<div class="container mt-4">
-    <h2>Vaša obvestila</h2>
-    <ul class="list-group mb-4">
-        @foreach (var notification in Model.Notifications.Take(10))
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center @(notification.IsRead ? "" : "list-group-item-warning")">
-                <span>
-                    <strong>@notification.CreatedAt.ToLocalTime():</strong> @notification.Message
-                </span>
-                @if (!notification.IsRead)
-                {
-                    <form method="post" asp-page-handler="MarkRead" asp-route-id="@notification.Id">
-                        <button class="btn btn-sm btn-outline-primary">Označi kot prebrano</button>
-                    </form>
-                }
-            </li>
-        }
-    </ul>
+<div class="container mt-3">
+    <h1 class="text-center mt-6 fw-semibold mb-3">Moje stave</h1>
 
-    <form method="post" asp-page-handler="MarkAllRead">
-        <button class="btn btn-sm btn-success">Označi vsa kot prebrana</button>
-    </form>
+    <h2>Obvestila</h2>
 
+    @if (!Model.Notifications.Any())
+    {
+        <p class="text-muted fst-italic mb-5">
+            Trenutno nimate obvestil.
+        </p>
+    }
+    else
+    {
+        <ul class="list-group mb-3">
+            @foreach (var notification in Model.Notifications.Take(10))
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center @(notification.IsRead ? "" : "list-group-item-warning")">
+                    <span>
+                        <strong>@notification.CreatedAt.ToLocalTime():</strong> @notification.Message
+                    </span>
 
-    <h1 class="mb-4">📋 Moje stave</h1>
+                    @if (!notification.IsRead)
+                    {
+                        <form method="post" asp-page-handler="MarkRead" asp-route-id="@notification.Id">
+                            <button class="btn btn-sm btn-outline-primary">
+                                Označi kot prebrano
+                            </button>
+                        </form>
+                    }
+                </li>
+            }
+        </ul>
+
+        <form method="post" asp-page-handler="MarkAllRead" class="mb-4">
+            <button class="btn btn-sm btn-success">
+                Označi vsa kot prebrana
+            </button>
+        </form>
+    }
+
+    <h2 class="fw-semibold mb-3">Vplačani listki</h2>
 
     @if (!Model.BetSlips.Any())
     {
         <div class="alert alert-info">
-            Nimate še nobene oddane stave. <a asp-page="/Index">Oddaj svojo prvo stavo tukaj!</a>
+            Nimate še nobene oddane stave. <a asp-page="/Index">Oddajte svojo prvo stavo tukaj!</a>
         </div>
     }
     else
@@ -42,9 +58,8 @@
         {
             <div class="card mb-4 shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center @(slip.Status == "WON" ? "bg-success text-white" : slip.Status == "LOST" ? "bg-danger text-white" : "bg-light")">
-                    <span>
-                        <strong>ID Lističa: #@slip.Id</strong> | 
-                        📅 @slip.PlacementTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                    <span> 
+                        Trenutek vplačila listka: 📅 @slip.PlacementTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
                     </span>
                     <span class="badge @(slip.Status == "OPEN" ? "bg-warning text-dark" : "bg-white text-dark")">
                         @slip.Status
@@ -54,22 +69,31 @@
                     <table class="table table-sm table-borderless">
                         <thead>
                             <tr>
-                                <th>Tekma</th>
-                                <th>Izid</th>
-                                <th class="text-end">Kvota</th>
+                                <th style="width:70%;">Tekma</th>
+                                <th class="text-end" style="width:15%;">Izid</th>
+                                <th class="text-end" style="width:15%;">Kvota</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in slip.BetItems)
                             {
                                 <tr>
-                                    <td>@item.MatchDescription</td>
-                                    <td><span class="badge bg-success text-dark">@item.SelectedOutcome</span></td>
-                                    <td class="text-end">@item.PlacedOdd.ToString("F2")</td>
-                                    <span class="badge
-                                        @(item.Sport == "Football" ? "bg-success" : "bg-warning")">
-                                        @(item.Sport == "Football" ? "⚽ Nogomet" : "🏀 Košarka")
-                                    </span>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge @(item.Sport == "Football" ? "bg-primary" : "bg-warning text-dark")">
+                                                @(item.Sport == "Football" ? "⚽ Nogomet" : "🏀 Košarka")
+                                            </span>
+                                            <span>@item.MatchDescription</span>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span class="badge bg-success text-white">@item.SelectedOutcome</span>
+                                    </td>
+
+                                    <td class="text-end">
+                                        @item.PlacedOdd.ToString("F2")
+                                    </td>
                                 </tr>
                             }
                         </tbody>
