@@ -20,5 +20,6 @@ namespace BetsiApp.Data
         public DbSet<BetSlip> BetSlips { get; set; }
         public DbSet<BetItem> BetItems { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

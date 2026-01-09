@@ -29,6 +29,8 @@ builder.Services.AddHttpClient<BasketballApiService>();
 // Registracija servisa za zaključevanje stav
 builder.Services.AddScoped<BetSettlingService>();
 
+builder.Services.AddScoped<NotificationService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

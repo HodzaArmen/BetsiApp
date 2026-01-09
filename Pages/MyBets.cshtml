@@ -5,7 +5,30 @@
 }
 
 <div class="container mt-4">
-    <h1 class="mb-4">📋 My Bets</h1>
+    <h2>Vaša obvestila</h2>
+    <ul class="list-group mb-4">
+        @foreach (var notification in Model.Notifications.Take(10))
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center @(notification.IsRead ? "" : "list-group-item-warning")">
+                <span>
+                    <strong>@notification.CreatedAt.ToLocalTime():</strong> @notification.Message
+                </span>
+                @if (!notification.IsRead)
+                {
+                    <form method="post" asp-page-handler="MarkRead" asp-route-id="@notification.Id">
+                        <button class="btn btn-sm btn-outline-primary">Označi kot prebrano</button>
+                    </form>
+                }
+            </li>
+        }
+    </ul>
+
+    <form method="post" asp-page-handler="MarkAllRead">
+        <button class="btn btn-sm btn-success">Označi vsa kot prebrana</button>
+    </form>
+
+
+    <h1 class="mb-4">📋 Moje stave</h1>
 
     @if (!Model.BetSlips.Any())
     {
