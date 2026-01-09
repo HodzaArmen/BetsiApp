@@ -59,5 +59,18 @@ namespace BetsiApp.Services
 
             return games.OrderBy(g => g.Date).ToList();
         }
+
+        public async Task<List<BasketballGame>> GetFinishedGamesAsync()
+        {
+            var games = await GetUpcomingGamesAsync();
+
+            // Za API-Sports je tekma "finished", ko ima rezultat
+            return games
+                .Where(g =>
+                    g.Scores?.Home?.Total != null &&
+                    g.Scores?.Away?.Total != null)
+                .ToList();
+        }
+
     }
 }
