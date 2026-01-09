@@ -1,12 +1,9 @@
+using BetsiApp.Data;
+using BetsiApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BetsiApp.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BetsiApp.Data; 
 
 namespace BetsiApp.Pages
 {
@@ -22,16 +19,25 @@ namespace BetsiApp.Pages
         }
 
         public decimal Balance { get; set; }
-        public string Message { get; set; } = string.Empty;
+
+        [TempData]
+        public string? ToastMessage { get; set; }
+
+        public string? InlineError { get; set; }
 
         [BindProperty]
         public decimal Amount { get; set; }
 
-        // 🔹 Zgodovina iz baze
+        [BindProperty]
+        public bool ShowAll { get; set; }
+
         public List<Transaction> History { get; set; } = new();
 
-        public async Task OnGetAsync()
+
+        public async Task<IActionResult> OnPostShowAllAsync()
         {
+            ShowAll = true;
+
             var user = await _userManager.GetUserAsync(User);
             Balance = user?.Balance ?? 0.00m;
 
@@ -42,75 +48,101 @@ namespace BetsiApp.Pages
                     .OrderByDescending(t => t.Date)
                     .ToListAsync();
             }
+
+            return Page();
+        }
+        public async Task OnGetAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            Balance = user?.Balance ?? 0.00m;
+
+            if (user != null)
+            {
+                History = await _db.Transactions
+                    .Where(t => t.UserId == user.Id)
+                    .OrderByDescending(t => t.Date)
+                    .Take(5)
+                    .ToListAsync();
+            }
         }
 
         public async Task<IActionResult> OnPostAddMoneyAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user != null && Amount > 0)
-            {
-                user.Balance += Amount;
-                await _userManager.UpdateAsync(user);
 
-                // shrani transakcijo v bazo
-                var transaction = new Transaction
-                {
-                    UserId = user.Id,
-                    Amount = Amount,
-                    Date = DateTime.UtcNow,
-                    Type = "Deposit",
-                    Description = $"Polog {Amount:F2} €"
-                };
-                _db.Transactions.Add(transaction);
-                await _db.SaveChangesAsync();
-
-                Message = $"Dodali ste {Amount:F2} € na račun.";
-            }
-            else
+            if (user == null)
             {
-                Message = "Prosimo, vnesite veljaven znesek.";
+                InlineError = "Uporabnik ni prijavljen.";
+                await OnGetAsync();
+                return Page();
             }
 
-            await OnGetAsync();
-            return Page();
+            if (Amount <= 0)
+            {
+                InlineError = "Prosim, vnesite veljaven znesek.";
+                await OnGetAsync();
+                return Page();
+            }
+
+            user.Balance += Amount;
+            await _userManager.UpdateAsync(user);
+
+            _db.Transactions.Add(new Transaction
+            {
+                UserId = user.Id,
+                Amount = Amount,
+                Date = DateTime.UtcNow,
+                Type = "Deposit",
+                Description = $"Polog {Amount:F2} €"
+            });
+
+            await _db.SaveChangesAsync();
+
+            ToastMessage = $"Dodali ste {Amount:F2} € na račun.";
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostWithdrawAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user != null && Amount > 0)
-            {
-                if (user.Balance >= Amount)
-                {
-                    user.Balance -= Amount;
-                    await _userManager.UpdateAsync(user);
 
-                    // shrani transakcijo v bazo
-                    var transaction = new Transaction
-                    {
-                        UserId = user.Id,
-                        Amount = Amount,
-                        Date = DateTime.UtcNow,
-                        Type = "Withdraw",
-                        Description = $"Dvig {Amount:F2} €"
-                    };
-                    _db.Transactions.Add(transaction);
-                    await _db.SaveChangesAsync();
-
-                    Message = $"Uspešno ste dvignili {Amount:F2} €.";
-                }
-                else
-                {
-                    Message = "Na računu ni dovolj sredstev.";
-                }
-            }
-            else
+            if (user == null)
             {
-                Message = "Prosimo, vnesite veljaven znesek.";
+                InlineError = "Uporabnik ni prijavljen.";
+                await OnGetAsync();
+                return Page();
             }
 
-            await OnGetAsync();
-            return Page();
+            if (Amount <= 0)
+            {
+                InlineError = "Prosim, vnesite veljaven znesek.";
+                await OnGetAsync();
+                return Page();
+            }
+
+            if (user.Balance < Amount)
+            {
+                InlineError = "Na računu ni dovolj sredstev.";
+                await OnGetAsync();
+                return Page();
+            }
+
+            user.Balance -= Amount;
+            await _userManager.UpdateAsync(user);
+
+            _db.Transactions.Add(new Transaction
+            {
+                UserId = user.Id,
+                Amount = Amount,
+                Date = DateTime.UtcNow,
+                Type = "Withdraw",
+                Description = $"Dvig {Amount:F2} €"
+            });
+
+            await _db.SaveChangesAsync();
+
+            ToastMessage = $"Uspešno ste dvignili {Amount:F2} €.";
+            return RedirectToPage();
         }
     }
 }

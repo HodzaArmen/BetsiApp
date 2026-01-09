@@ -27,9 +27,30 @@ namespace BetsiApp.Pages
 
         public List<BasketballGame> UpcomingGames { get; set; } = new();
 
+        [BindProperty(SupportsGet = true)]
+        public string? League { get; set; }
+
+        public List<string> LeagueOptions { get; set; } = new();
+
         public async Task OnGetAsync()
         {
-            UpcomingGames = await _basketballApiService.GetUpcomingGamesAsync();
+            var games = await _basketballApiService.GetUpcomingGamesAsync();
+
+            LeagueOptions = games
+                .Select(g => g.League?.Name)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Distinct()
+                .OrderBy(n => n)
+                .ToList()!;
+
+            if (!string.IsNullOrWhiteSpace(League))
+            {
+                games = games
+                    .Where(g => g.League?.Name == League)
+                    .ToList();
+            }
+
+            UpcomingGames = games;
         }
 
         // 🏀 STAVNI HANDLER

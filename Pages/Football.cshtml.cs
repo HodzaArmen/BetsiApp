@@ -31,9 +31,32 @@ namespace BetsiApp.Pages
 
         public List<Match> UpcomingMatches { get; set; } = new();
 
+        [BindProperty(SupportsGet = true)]
+        public string? Competition { get; set; }
+
+        public List<string> CompetitionOptions { get; set; } = new();
+
         public async Task OnGet()
         {
-            UpcomingMatches = await _footballService.GetUpcomingMatchesAsync();
+            var matches = await _footballService.GetUpcomingMatchesAsync();
+
+            // dropdown options
+            CompetitionOptions = matches
+                .Select(m => m.Competition?.Name)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Distinct()
+                .OrderBy(n => n)
+                .ToList()!;
+
+            // apply filter if selected
+            if (!string.IsNullOrWhiteSpace(Competition))
+            {
+                matches = matches
+                    .Where(m => m.Competition?.Name == Competition)
+                    .ToList();
+            }
+
+            UpcomingMatches = matches;
         }
 
         [Authorize]
@@ -57,7 +80,7 @@ namespace BetsiApp.Pages
             if (user.Balance < stake)
             {
                 TempData["StatusMessage"] =
-                    $"Error: Nimate dovolj sredstev (Stanje: {user.Balance} €).";
+                    $"Trenutno nimate dovolj sredstev za vplačilo te stave (Stanje: {user.Balance} €).";
                 return RedirectToPage();
             }
 

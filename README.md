@@ -1,14 +1,14 @@
 # Betsi
 
-Dobrodošli v projektu **Betsi**. To je spletna aplikacija, razvita v **ASP.NET Core 8.0 Razor Pages**, ki služi kot platforma za prikaz nogometnih tekem, kvot in omogoča oddajo virtualnih stav.
+Dobrodošli v projektu **Betsi**. To je spletna aplikacija, razvita v **ASP.NET Core 8.0 Razor Pages**, ki služi kot platforma za prikaz nogometnih ter košarkaških tekem, (trenutno namišljenih) kvot in omogoča oddajo virtualnih stav.
 
-## 1. Začetek in Zagon Projekta
+## 1. Začetek projekta
 
 Za delovanje aplikacije potrebujete naslednje orodje:
 
-* **[.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)** ali novejše.
+* **[.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)**.
 
-### A. Kloniranje in Namestitev
+### A. Kloniranje in namestitev
 
 ```bash
 # Kloniranje repozitorija
@@ -19,24 +19,24 @@ cd BetsiApp
 dotnet restore
 ```
 
-### B. Zagon Baze Podatkov in Seeding
+### B. Zagon baze podatkov in seeding
 ```bash
-# 1. Posodobi bazo podatkov in ustvari tabele (za Identity in Stave)
+# 1. Posodobi bazo podatkov in ustvari tabele
 dotnet ef database update --context ApplicationDbContext
 
 # 2. Zagon aplikacije
 dotnet run
 ```
 
-Testni Uporabniki za Prijavo:
+Testni uporabniki za prijavo:
 - admin@betsi.com
 - Geslo: Test123!
 
 - uporabnik@betsi.com
 - Geslo: Uporabnik123!
 
-## 2. Struktura Projekta in Ključne Komponente
-Aplikacija sledi arhitekturi ASP.NET Core Razor Pages in principu ločevanja skrbi.
+## 2. Struktura Projekta
+Aplikacija sledi arhitekturi ASP.NET Core Razor Pages.
 
 - Pages/Index.cshtml - Glavna stran z dinamičnim prikazom tekem, kvot in interaktivnim stavnim lističem (JavaScript/jQuery).
 - Services/FootballApiService.cs - Logika za pridobivanje podatkov iz zunanjega API-ja.
@@ -45,20 +45,19 @@ Aplikacija sledi arhitekturi ASP.NET Core Razor Pages in principu ločevanja skr
 - Models/BettingModels.cs - C# modeli za stavno logiko: Odd, BetSlip, BetItem.
 - Areas/Identity/ - Generirane Razor Pages za avtentikacijo (Prijava, Registracija, Odjava).
 
-## 3. Nadaljnji Razvoj in TODO
-Glavni manjkajoči del je strežniška logika za oddajo stav in vzdrževanje zgodovine.
+## 3. Nadaljnji razvoj in TODO
 
-### A. Implementacija Oddaje Stave (MVP)
-Cilj: Dokončati logiko za shranjevanje.
+### A. Reševanje stav (settlement logic) za košarkaške tekme
+Cilj: Posodabljanje statusa stav po koncu tekme za košarkaške tekme.
 
-Task: V Pages/Index.cshtml.cs implementirati OnPostPlaceBetAsync (ali podoben Handler), ki prejme podatke stavnega lističa iz front-enda in jih shrani v bazo podatkov kot entiteti BetSlip in BetItem, povezani s prijavljenim uporabnikom.
+Status: Narejeno, ampak ne deluje pravilno - košarkaške stave se nikoli ne zaključijo.
 
-### B. Upravljanje Zgodovine Stav
-Cilj: Omogočiti uporabnikom pregled njihovih stav.
+### B. Implementacija oddaje stavnega listka z več tekmami
+Cilj: Dokončati feature, ki uporabnikom omogoča, da na stavni listek dodajo več kot eno stavo, preden se le-ta zaključi in ga vplačajo.
 
-Task: Ustvariti novo stran (npr. /BetSlips/Index), ki bo iz baze podatkov brala in prikazovala vse BetSlip entitete, oddane s strani prijavljenega uporabnika.
+Status: Ne bo časa...
 
-### C. Reševanje Stav (Settlement Logic)
-Cilj: Posodabljanje statusa stav po koncu tekme.
+### C. Implementacija javnih leaderboardov
+Cilj: Saj ni pomembno
 
-Task: Implementirati logiko, ki na podlagi končnih rezultatov, pridobljenih iz zunanjega API-ja, posodobi polje Status v tabeli BetSlip (npr. na WON ali LOST).
+Status: Niti v sanjah nam ne uspe.
