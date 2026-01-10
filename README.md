@@ -47,17 +47,12 @@ Aplikacija sledi arhitekturi ASP.NET Core Razor Pages.
 
 ## 3. Nadaljnji razvoj in TODO
 
-### A. Reševanje stav (settlement logic) za košarkaške tekme
-Cilj: Posodabljanje statusa stav po koncu tekme za košarkaške tekme.
-
-Status: Narejeno, ampak ne deluje pravilno - košarkaške stave se nikoli ne zaključijo.
-
-### B. Implementacija oddaje stavnega listka z več tekmami
+### A. Implementacija oddaje stavnega listka z več tekmami
 Cilj: Dokončati feature, ki uporabnikom omogoča, da na stavni listek dodajo več kot eno stavo, preden se le-ta zaključi in ga vplačajo.
 
 Status: Ne bo časa...
 
-### C. Implementacija javnih leaderboardov
+### B. Implementacija javnih leaderboardov
 Cilj: Saj ni pomembno
 
 Status: Niti v sanjah nam ne uspe.
